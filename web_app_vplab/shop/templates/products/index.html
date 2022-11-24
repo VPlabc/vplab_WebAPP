@@ -1,0 +1,256 @@
+{% extends "layouts/base-fullscreen.html" %}
+{% block content %}
+{% include '_messages.html' %}
+{% include 'includes/navigation.html' %}
+<div class="container">
+    <div class="row">
+        {% if brand %}
+         {% for b in brand.items %}
+        <div class="col-md-6 mt-4">
+            <div class="card">
+              <a href="{{url_for('single_page',id=b.id)}}">
+                <img src="{{url_for('static', filename='images/' + b.image_1)}}" class="card-img-top" alt="{{b.name}}" style="height: 100%;width:100%;max-width:100%; max-height: 100%;"/>
+              </a>  
+                <div class="card-body">
+                    {% if b.discount > 0 %}
+                    <h5 style="text-shadow: 1px 2px 2px #000; color: #f00; transform: rotate(-15deg); position: absolute; top: 23%; left: 25%; font-weight: 600;"> Giảm giá {{b.discount}} %</h5>
+                    {% endif %}
+                  <h5 class="text-center">{{b.name}}</h5>
+                  <p class="text-center">Giá ${{b.price}}</p>
+                  <p class="text-center">Còn: {{b.stock}}</p>
+                </div>
+                <div class="card-footer">
+                  <div class="row align-items-center">
+                    <div class="col-auto">
+                      <a href="{{url_for('single_page',id=b.id)}}" class="float-left btn btn-sm btn-primary">Thông Tin</a>
+                    </div>
+                    <div class="col-auto ms--2">
+                      <form action="{{url_for('AddCart')}}" method="post">
+                        <input type="hidden" name="product_id" value="{{b.id}}">
+                        <button type="submit" class="btn btn-sm btn-warning float-right">Thêm vào giỏ </button>
+                        <input type="hidden" name="quantity" value="1" min="1" max="20">
+                        {% set colors = b.colors.split(',') %}
+                        <select name="colors" id="colors" style="visibility: hidden;">
+                            {% for color in colors %}
+                            {% set col = color.split(':') %}
+                            <option value="{{col[0]}}">{{col[0] | capitalize }}</option>
+                            {% endfor %}
+                        </select>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+        {% endfor %}
+    </div>
+    
+    <div class="row mt-4">
+      <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination mb-0">
+                <li class="page-item">
+                  {% if products.has_prev %}
+                    <a class="page-link" href="{{url_for('shop', page=products.prev_num)}}"class="btn btn-sm btn-outline-info">Trở lại</a>
+                  {% endif %}
+                </li>
+                
+                  {% if products.total> 8 %}
+                      {% for page_num in products.iter_pages(left_edge=1, right_edge=2, left_current=1,right_current=2) %}
+                        {% if page_num %}
+                          {% if products.page == page_num %}
+                            <li class="page-item">
+                              <a class="page-link" href="{{url_for('shop', page=page_num)}}" class="btn btn-sm btn-info">{{page_num}}</a>
+                            </li>
+                          {% else %}
+                            <li class="page-item">
+                              <a class="page-link" href="{{url_for('shop', page=page_num)}}" class="btn btn-sm btn-outline-info">{{page_num}}</a>
+                            </li>
+                          {% endif %}
+                        {% else %}
+                          ...
+                        {% endif %}
+                      {% endfor %}
+                  {% endif %}
+                <li class="page-item">
+                  {% if products.has_next %}
+                    <a class="page-link" href="{{url_for('shop', page=products.next_num)}}"class="btn btn-sm btn-outline-info">Tiếp</a>
+                  {% endif %}
+                </li>
+            </ul>
+          </nav>
+        {% if products.total> 8 %}
+          <div class="fw-normal small mt-4 mt-lg-0">Hiển thị <b>8</b> sản phẩm/ trang. Tổng số <b>{{products.total}}</b> sản phẩm</div>
+        {% else %}
+          <div class="fw-normal small mt-4 mt-lg-0">Hiển thị <b>{{products.total}}</b> sản phẩm/ trang. Tổng số <b>{{products.total}}</b> sản phẩm</div>
+        {% endif %}
+      </div>
+    </div>
+    <!--================= END OF BARNDS FORLOOP ================-->
+    <div class="row">
+        {% elif get_cat_prod %}
+        {% for get_cat in get_cat_prod.items %}
+        <div class="col-md-3 mt-4">
+            <div class="card">
+                <img src="{{url_for('static', filename='images/' + get_cat.image_1)}}" class="card-img-top" alt="{{get_cat.name}}" height="200" width="200">
+                <div class="card-body">
+                    {% if get_cat.discount > 0 %}
+                    <h5 style="text-shadow: 1px 2px 2px #000; color: #f00; transform: rotate(-15deg); position: absolute; top: 23%; left: 25%; font-weight: 600;"> Discount {{get_cat.discount}}</h5>
+                    {% endif %}
+                  <h5 class="text-center">{{get_cat.name}}</h5>
+                  <p class="text-center">Giá {{get_cat.price}}</p>
+                  <p class="text-center">Còn: {{get_cat.stock}}</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{{url_for('single_page', id=get_cat.id)}}" class="float-left btn btn-sm btn-primary">Thông Tin</a>
+                    <form action="{{url_for('AddCart')}}" method="post">
+                      <input type="hidden" name="product_id" value="{{get_cat.id}}">
+                      <button type="submit" class="btn btn-sm btn-warning float-right">Thêm vào giỏ</button>
+                      <input type="hidden" name="quantity" value="1" min="1" max="20">
+                      {% set colors = get_cat.colors.split(',') %}
+                      <select name="colors" id="colors" style="visibility: hidden;">
+                          {% for color in colors %}
+                          {% set col = color.split(':') %}
+                          <option value="{{col[0]}}">{{col[0] | capitalize }}</option>
+                          {% endfor %}
+                      </select>
+                  </form>
+                </div>
+            </div>
+          </div>
+
+        {% endfor %}
+      </div>
+
+      <div class="row mt-4">
+        <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
+          <nav aria-label="Page navigation example">
+              <ul class="pagination mb-0">
+                  <li class="page-item">
+                    {% if products.has_prev %}
+                      <a class="page-link" href="{{url_for('shop', page=products.prev_num)}}"class="btn btn-sm btn-outline-info">Trở lại</a>
+                    {% endif %}
+                  </li>
+                  
+                    {% if products.total> 8 %}
+                        {% for page_num in products.iter_pages(left_edge=1, right_edge=2, left_current=1,right_current=2) %}
+                          {% if page_num %}
+                            {% if products.page == page_num %}
+                              <li class="page-item">
+                                <a class="page-link" href="{{url_for('shop', page=page_num)}}" class="btn btn-sm btn-info">{{page_num}}</a>
+                              </li>
+                            {% else %}
+                              <li class="page-item">
+                                <a class="page-link" href="{{url_for('shop', page=page_num)}}" class="btn btn-sm btn-outline-info">{{page_num}}</a>
+                              </li>
+                            {% endif %}
+                          {% else %}
+                            ...
+                          {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                  <li class="page-item">
+                    {% if products.has_next %}
+                      <a class="page-link" href="{{url_for('shop', page=products.next_num)}}"class="btn btn-sm btn-outline-info">Tiếp</a>
+                    {% endif %}
+                  </li>
+              </ul>
+            </nav>
+          {% if products.total> 8 %}
+            <div class="fw-normal small mt-4 mt-lg-0">Hiển thị <b>8</b> sản phẩm/ trang. Tổng số <b>{{products.total}}</b> sản phẩm</div>
+          {% else %}
+            <div class="fw-normal small mt-4 mt-lg-0">Hiển thị <b>{{products.total}}</b> sản phẩm/ trang. Tổng số <b>{{products.total}}</b> sản phẩm</div>
+          {% endif %}
+
+        </div>
+      </div>
+        <!--========= END ELSE IF ===============-->
+        <div class="row">
+         {% else %}
+        {% for product in products.items %}
+      <div class="col-md-3 mt-4">
+        <div class="card">
+            <img src="{{url_for('static', filename='images/' + product.image_1)}}" class="card-img-top" alt="{{product.name}}" height="200" width="200">
+            <div class="card-body">
+                {% if product.discount > 0 %}
+                <h5 style="text-shadow: 1px 2px 2px #000; color: #f00; transform: rotate(-15deg); position: absolute; top: 23%; left: 25%; font-weight: 600;"> Discount {{product.discount}}</h5>
+                {% endif %}
+              <h5 class="text-center">{{product.name}}</h5>
+              <p class="text-center">Giá ${{product.price}}</p>
+                  <p class="text-center">Còn: {{product.stock}}</p>
+            </div>
+            <div class="card-footer">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                  <a href="{{url_for('single_page',id=product.id)}}" class="float-left btn btn-sm btn-primary">Thông Tin</a>
+                </div>
+                <div class="col-auto ms--2">
+                  
+                  <form action="{{url_for('AddCart')}}" method="post">
+                    <input type="hidden" name="product_id" value="{{product.id}}">
+                    <button type="submit" class="btn btn-sm btn-warning float-right">Thêm vào giỏ </button>
+                    <input type="hidden" name="quantity" value="1" min="1" max="20">
+                    {% set colors = product.colors.split(',') %}
+                    <select name="colors" id="colors" style="visibility: hidden;">
+                        {% for color in colors %}
+                        {% set col = color.split(':') %}
+                        <option value="{{col[0]}}">{{col[0] | capitalize }}</option>
+                        {% endfor %}
+                    </select>
+                  </form>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+        {% endfor %}
+      </div>
+
+      <div class="row mt-4">
+        <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
+          <nav aria-label="Page navigation example">
+              <ul class="pagination mb-0">
+                  <li class="page-item">
+                    {% if products.has_prev %}
+                      <a class="page-link" href="{{url_for('shop', page=products.prev_num)}}"class="btn btn-sm btn-outline-info">Trở về</a>
+                    {% endif %}
+                  </li>
+                  
+                    {% if products.total> 8 %}
+                        {% for page_num in products.iter_pages(left_edge=1, right_edge=2, left_current=1,right_current=2) %}
+                          {% if page_num %}
+                            {% if products.page == page_num %}
+                              <li class="page-item">
+                                <a class="page-link" href="{{url_for('shop', page=page_num)}}" class="btn btn-sm btn-info">{{page_num}}</a>
+                              </li>
+                            {% else %}
+                              <li class="page-item">
+                                <a class="page-link" href="{{url_for('shop', page=page_num)}}" class="btn btn-sm btn-outline-info">{{page_num}}</a>
+                              </li>
+                            {% endif %}
+                          {% else %}
+                            ...
+                          {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                  <li class="page-item">
+                    {% if products.has_next %}
+                      <a class="page-link" href="{{url_for('shop', page=products.next_num)}}"class="btn btn-sm btn-outline-info">Tiếp Theo</a>
+                    {% endif %}
+                  </li>
+              </ul>
+            </nav>
+          {% if products.total> 8 %}
+            <div class="fw-normal small mt-4 mt-lg-0">Hiển thị <b>8</b> sản phẩm/ trang. Tổng số <b>{{products.total}}</b> sản phẩm</div>
+          {% else %}
+            <div class="fw-normal small mt-4 mt-lg-0">Hiển thị <b>{{products.total}}</b> sản phẩm/ trang. Tổng số <b>{{products.total}}</b> sản phẩm</div>
+          {% endif %}
+        </div>
+      </div>
+
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}
+
+

@@ -1,0 +1,103 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+
+
+<div class="container">
+    {% include '_messages.html' %}
+    <table class="table tbale-sm">
+        <thead>
+            <th>Sr</th>
+            <th>Name</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </thead>
+        <tbody>
+         {% if brands %}
+         <div class="py-4">
+              <div class="text-center  p-2 h3 mb-3">Thương Hiệu</div>
+              <a href="{{url_for('addbrand')}}" class="btn btn-gray-800 align-items-center" >
+                  <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                  Thêm
+              </a>
+          </div>
+          {% for brand in brands %}
+          <tr>
+            <td>{{loop.index}}</td>
+            <td>{{ brand.name }}</td>
+            <td><a href="{{url_for('updatebrand', id=brand.id)}}" class="btn btn-sm btn-info">Edit</a></td>
+            
+          <td>
+            <!-- Button Modal -->
+            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modal_brand-{{brand.id}}">Xoá</button>
+        </td>
+        </tr>
+<!--============= MODEL ===================-->
+<!-- Modal Content -->
+  <div class="modal fade" id="modal_brand-{{brand.id}}" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
+      <div class="modal-dialog modal-info modal-dialog-centered" role="document">
+          <div class="modal-content bg-gradient-secondary">
+              <button type="button" class="btn-close theme-settings-close fs-6 ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+              <div class="modal-header">
+                  <p class="modal-title text-gray-200" id="modal-title-notification">Xoá {{brand.name }}</p>
+                  </button>
+              </div>
+              <div class="modal-body">
+                <p class="text-gray-200">Bạn có chắc muốn xoá {{ brand.name }}</p>
+              </div>
+              <div class="modal-footer">
+                <form action="{{url_for('deletebrand',id=brand.id)}}" method="post">
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+              </div>
+          </div>
+      </div>
+  </div>
+<!--==============MODEL ===================-->
+
+          {% endfor %}
+          {% else %}
+          <div class="py-4">
+            <div class="text-center  p-2 h3 mb-3">Dòng Sản Phẩm</div>
+            <a href="{{url_for('addcat')}}" class="btn btn-gray-800 align-items-center" >
+                <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                Thêm
+            </a>
+          {% for category in categories %}
+          <tr>
+            <td>{{loop.index}}</td>
+            <td>{{ category.name }}</td>
+            <td> <a href="{{url_for('updatecat', id=category.id)}}" class="btn btn-sm btn-info">Edit</a></td>
+            <td>
+                <!-- Button Modal -->
+                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modal-{{category.id}}">Xoá</button>
+            </td>
+            </tr>
+<!--============= MODEL ===================-->
+    <!-- Modal Content -->
+      <div class="modal fade" id="modal-{{category.id}}" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
+          <div class="modal-dialog modal-info modal-dialog-centered" role="document">
+              <div class="modal-content bg-gradient-secondary">
+                  <button type="button" class="btn-close theme-settings-close fs-6 ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <div class="modal-header">
+                      <p class="modal-title text-gray-200" id="modal-title-notification">Xoá {{category.name }}</p>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                    <p class="text-gray-200">Bạn có chắc muốn xoá {{ category.name }}</p>
+                  </div>
+                  <div class="modal-footer">
+                    <form action="{{url_for('deletecat',id=category.id)}}" method="post">
+                      <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+<!--==============MODEL ===================-->
+
+          {% endfor %}
+          {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}

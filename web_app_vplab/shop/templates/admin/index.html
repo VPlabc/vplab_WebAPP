@@ -1,0 +1,70 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+
+
+<div class="container">
+    {% include '_messages.html' %}
+
+    <div class="py-4">
+        <div class="text-center  p-2 h3 mb-3">Sản Phẩm</div>
+        <a href="{{url_for('addproduct')}}" class="btn btn-gray-800 d-inline-flex align-items-center me-2" >
+            <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+            Thêm
+        </a>
+    </div>
+    <table class="table tbale-sm">
+        <thead>
+            <th>STT</th>
+            <th>Hình ảnh</th>
+            <th>Tên Hàng</th>
+            <th>Giá</th>
+            <th>Giả giá</th>
+            <th>Thương Hiệu</th>
+            <th>Chỉnh sửa</th>
+            <th>Xoá</th>
+        </thead>
+        <tbody>
+          {% for product in products %}
+          <tr>
+            <td>{{loop.index}}</td>
+            <td> <img src="{{url_for('static',filename='images/' + product.image_1)}}" alt="{{product.name}}" width="50" height="20"></td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.price }}</td>
+            <td>{{ product.discount }}</td>
+            <td>{{ product.brand.name}}</td>
+            <td> <a href="{{url_for('updateproduct', id=product.id)}}" class="btn btn-sm btn-info">Chỉnh sửa </a> </td>
+            <td>
+              <!-- Button Modal -->
+              <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modal-{{product.id}}">Xoá</button>
+          </td>
+          </tr>
+ <!--============= MODEL ===================-->
+          <!-- Modal Content -->
+            <div class="modal fade" id="modal-{{product.id}}" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
+                <div class="modal-dialog modal-info modal-dialog-centered" role="document">
+                    <div class="modal-content bg-gradient-secondary">
+                        <button type="button" class="btn-close theme-settings-close fs-6 ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="modal-header">
+                            <p class="modal-title text-gray-200" id="modal-title-notification">Xoá {{product.name }}</p>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                          <p class="text-gray-200">Bạn có chắc muốn xoá {{ product.name }}</p>
+                        </div>
+                        <div class="modal-footer">
+                          <form action="{{url_for('deleteproduct',id=product.id)}}" method="post">
+                            <button type="submit" class="btn btn-white">Xoá</button>
+                          </form>
+                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Modal Content -->
+<!--==============MODEL ===================-->
+
+          {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}

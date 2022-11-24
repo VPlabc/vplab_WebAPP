@@ -1,0 +1,334 @@
+<nav class="navbar navbar-top navbar-expand navbar-dashboard navbar-dark ps-0 pe-2 pb-0">
+              <div class="container-fluid px-0">
+                <div class="d-flex justify-content-between w-100" id="navbarSupportedContent">
+                  <!-- ____________________________________________________________________________________________________________________________________________ -->
+                  
+                  {% if shoppage == True %}
+                  <div class="d-flex align-items-center">
+                    <!-- Search form -->
+                      <form class="navbar-search form-inline" id="navbar-search-main" action="{{url_for('result')}}">
+                        <div class="input-group input-group-merge search-bar">
+                          <button class="btn input-group-text" id="topbar-addon" type="submit">
+                              <svg class="icon icon-xs" x-description="Heroicon name: solid/search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
+                              </svg>
+                          </button>
+                            <input type="search" class="form-control" id="topbarInputIconLeft" placeholder="Search" aria-label="Search" aria-describedby="topbar-addon" name="q">
+                        </div>
+                      </form>
+                    <!-- / Search form -->
+
+                  <!-- button -->
+                  <div class="py-4">
+                    <div class="dropdown">
+                        <button class="btn btn-gray-800 d-inline-flex align-items-center me-2 dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                            Thương hiệu
+                        </button>
+                        <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
+                          {% for brand in brands %}
+                          <a class="dropdown-item d-flex align-items-center" href="{{url_for('get_brand', id=brand.id)}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-inboxes" viewBox="0 0 16 16">
+                              <path d="M4.98 1a.5.5 0 0 0-.39.188L1.54 5H6a.5.5 0 0 1 .5.5 1.5 1.5 0 0 0 3 0A.5.5 0 0 1 10 5h4.46l-3.05-3.812A.5.5 0 0 0 11.02 1H4.98zm9.954 5H10.45a2.5 2.5 0 0 1-4.9 0H1.066l.32 2.562A.5.5 0 0 0 1.884 9h12.234a.5.5 0 0 0 .496-.438L14.933 6zM3.809.563A1.5 1.5 0 0 1 4.981 0h6.038a1.5 1.5 0 0 1 1.172.563l3.7 4.625a.5.5 0 0 1 .105.374l-.39 3.124A1.5 1.5 0 0 1 14.117 10H1.883A1.5 1.5 0 0 1 .394 8.686l-.39-3.124a.5.5 0 0 1 .106-.374L3.81.563zM.125 11.17A.5.5 0 0 1 .5 11H6a.5.5 0 0 1 .5.5 1.5 1.5 0 0 0 3 0 .5.5 0 0 1 .5-.5h5.5a.5.5 0 0 1 .496.562l-.39 3.124A1.5 1.5 0 0 1 14.117 16H1.883a1.5 1.5 0 0 1-1.489-1.314l-.39-3.124a.5.5 0 0 1 .121-.393zm.941.83.32 2.562a.5.5 0 0 0 .497.438h12.234a.5.5 0 0 0 .496-.438l.32-2.562H10.45a2.5 2.5 0 0 1-4.9 0H1.066z"/>
+                            </svg>
+                              {{brand.name}}
+                          </a>
+                          {% endfor %}
+                        </div>
+                    </div>
+                  </div>
+                  <div class="py-4">
+                    <div class="dropdown">
+                        <button class="btn btn-gray-800 d-inline-flex align-items-center me-2 dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                          Sản phẩm
+                      </button>
+                      <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
+                        {% for category in categories %}
+                        <a class="dropdown-item d-flex align-items-center" href="{{url_for('get_category',id=category.id)}}">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box2" viewBox="0 0 16 16">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.95.4a1 1 0 0 1 .8-.4h8.5a1 1 0 0 1 .8.4l2.85 3.8a.5.5 0 0 1 .1.3V15a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V4.5a.5.5 0 0 1 .1-.3L2.95.4ZM7.5 1H3.75L1.5 4h6V1Zm1 0v3h6l-2.25-3H8.5ZM15 5H1v10h14V5Z"/>
+                          </svg>
+                            {{category.name}}
+                        </a>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                
+                  <div class="py-4">
+                    <a href="{{url_for('getCart')}}">
+                      <button class="btn btn-gray-800 ">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart4" viewBox="0 0 16 16">
+                          <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+                        </svg>
+                        ({{ session['Shoppingcart']|length }})
+                      </button> 
+                    </a>
+                  </div>
+                </div>
+                {% else %}
+                <div class="d-flex align-items-center"><div class="py-4"></div></div>
+                {% endif %}
+                <!-- ____________________________________________________________________________________________________________________________________________ -->
+                <!-- {% if shopedit == True %}
+
+                <div class="d-flex align-items-center">
+                <a class="navbar-brand" href="{{url_for('admin')}}">Back</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                        <ul class="navbar-nav">
+                          <li class="nav-item active">
+                            
+                              <a href="{{url_for('admin')}}">
+                                <button class="btn btn-gray-800 ">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart4" viewBox="0 0 16 16">
+                                      <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+                                    </svg>
+                                    Back
+                                  </button> 
+                              </a>
+                          </li>
+                          <li class="nav-item">
+                              <a href="{{url_for('brands')}}">
+                                 <button class="btn btn-gray-800 ">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart4" viewBox="0 0 16 16">
+                                      <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+                                    </svg>
+                                    Thương hiệu
+                                </button>
+                              </a>
+                          </li>
+                          <li class="nav-item">
+                              <a href="{{url_for('categories')}}">
+                                <button class="btn btn-gray-800 ">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart4" viewBox="0 0 16 16">
+                                      <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+                                    </svg>
+                                    Dòng sản phẩm
+                                </button> 
+                              </a>
+                          </li>
+                          <li class="nav-item">
+                          <div class="dropdown">
+                              <button class="btn btn-gray-800 d-inline-flex align-items-center me-2 dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart4" viewBox="0 0 16 16">
+                                  <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+                                </svg>
+                                Thêm 
+                              </button> 
+                              <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
+                                <a class="dropdown-item d-flex align-items-center" href="{{url_for('addproduct')}}">Thêm sản phẩm</a>
+                                <a class="dropdown-item d-flex align-items-center" href="{{url_for('addbrand')}}">Thêm thương hiệu</a>
+                                <a class="dropdown-item d-flex align-items-center" href="{{url_for('addcat')}}">Thêm sản phẩm</a>
+                              </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </nav>
+              </div>
+                {% endif %} -->
+                <!-- ____________________________________________________________________________________________________________________________________________ -->
+
+                  <!-- button  -->
+                  {% if current_user.is_authenticated %}
+                  <!-- Navbar links -->
+                  <ul class="navbar-nav align-items-center">
+                    <li class="nav-item dropdown">
+                      <a class="nav-link text-dark notification-bell unread dropdown-toggle" data-unread-notifications="true" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                        <svg class="icon icon-sm text-gray-900" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path></svg>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-lg dropdown-menu-center mt-2 py-0">
+                        <div class="list-group list-group-flush">
+                          <a href="#" class="text-center text-primary fw-bold border-bottom border-light py-3">Notifications</a>
+                          <a href="#" class="list-group-item list-group-item-action border-bottom">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                  <!-- Avatar -->
+                                  <img alt="Image placeholder" src="/static/assets/img/team/profile-picture-1.jpg" class="avatar-md rounded">
+                                </div>
+                                <div class="col ps-0 ms-2">
+                                  <div class="d-flex justify-content-between align-items-center">
+                                      <div>
+                                        <h4 class="h6 mb-0 text-small">Jose Leos</h4>
+                                      </div>
+                                      <div class="text-end">
+                                        <small class="text-danger">a few moments ago</small>
+                                      </div>
+                                  </div>
+                                  <p class="font-small mt-1 mb-0">Added you to an event "Project stand-up" tomorrow at 12:30 AM.</p>
+                                </div>
+                            </div>
+                          </a>
+                          <a href="#" class="list-group-item list-group-item-action border-bottom">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                  <!-- Avatar -->
+                                  <img alt="Image placeholder" src="/static/assets/img/team/profile-picture-2.jpg" class="avatar-md rounded">
+                                </div>
+                                <div class="col ps-0 ms-2">
+                                  <div class="d-flex justify-content-between align-items-center">
+                                      <div>
+                                        <h4 class="h6 mb-0 text-small">Neil Sims</h4>
+                                      </div>
+                                      <div class="text-end">
+                                        <small class="text-danger">2 hrs ago</small>
+                                      </div>
+                                  </div>
+                                  <p class="font-small mt-1 mb-0">You've been assigned a task for "Awesome new project".</p>
+                                </div>
+                            </div>
+                          </a>
+                          <a href="#" class="list-group-item list-group-item-action border-bottom">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                  <!-- Avatar -->
+                                  <img alt="Image placeholder" src="/static/assets/img/team/profile-picture-3.jpg" class="avatar-md rounded">
+                                </div>
+                                <div class="col ps-0 m-2">
+                                  <div class="d-flex justify-content-between align-items-center">
+                                      <div>
+                                        <h4 class="h6 mb-0 text-small">Roberta Casas</h4>
+                                      </div>
+                                      <div class="text-end">
+                                        <small>5 hrs ago</small>
+                                      </div>
+                                  </div>
+                                  <p class="font-small mt-1 mb-0">Tagged you in a document called "Financial plans",</p>
+                                </div>
+                            </div>
+                          </a>
+                          <a href="#" class="list-group-item list-group-item-action border-bottom">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                  <!-- Avatar -->
+                                  <img alt="Image placeholder" src="/static/assets/img/team/profile-picture-4.jpg" class="avatar-md rounded">
+                                </div>
+                                <div class="col ps-0 ms-2">
+                                  <div class="d-flex justify-content-between align-items-center">
+                                      <div>
+                                        <h4 class="h6 mb-0 text-small">Joseph Garth</h4>
+                                      </div>
+                                      <div class="text-end">
+                                        <small>1 d ago</small>
+                                      </div>
+                                  </div>
+                                  <p class="font-small mt-1 mb-0">New message: "Hey, what's up? All set for the presentation?"</p>
+                                </div>
+                            </div>
+                          </a>
+                          <a href="#" class="list-group-item list-group-item-action border-bottom">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                  <!-- Avatar -->
+                                  <img alt="Image placeholder" src="/static/assets/img/team/profile-picture-5.jpg" class="avatar-md rounded">
+                                </div>
+                                <div class="col ps-0 ms-2">
+                                  <div class="d-flex justify-content-between align-items-center">
+                                      <div>
+                                        <h4 class="h6 mb-0 text-small">Bonnie Green</h4>
+                                      </div>
+                                      <div class="text-end">
+                                        <small>2 hrs ago</small>
+                                      </div>
+                                  </div>
+                                  <p class="font-small mt-1 mb-0">New message: "We need to improve the UI/UX for the landing page."</p>
+                                </div>
+                            </div>
+                          </a>
+                          <a href="#" class="dropdown-item text-center fw-bold rounded-bottom py-3">
+                            <svg class="icon icon-xxs text-gray-400 me-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path></svg>
+                            View all
+                          </a>
+                        </div>
+                      </div>
+                    </li>
+
+                    
+                    <li class="nav-item dropdown ms-lg-3">
+                      <a class="nav-link dropdown-toggle pt-1 px-0" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="media d-flex align-items-center">
+                          <img class="avatar rounded-circle" alt="Image placeholder" src="static/team/{{ current_user.profile}}">
+                          <div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
+                            <span class="mb-0 font-small fw-bold text-gray-900">
+                              <strong>{{ current_user.username }}</strong>
+                            </span>
+                          </div>
+                        </div>
+                      </a>
+                      <div class="dropdown-menu dashboard-dropdown dropdown-menu-end mt-2 py-1">
+                        <a class="dropdown-item d-flex align-items-center" href="/Settings">
+                          <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"></path></svg>
+                          Thông tin cá nhân
+                        </a>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                          <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z" clip-rule="evenodd"></path></svg>
+                          Tin nhắn
+                        </a>
+                {% if user_auth != 1 or user_auth != 2 or user_auth != 3 or user_auth != 4 or user_auth != 5 %} <!-- customer-->
+                        <a class="dropdown-item d-flex align-items-center" href="/shop">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shop-window" viewBox="0 0 16 16">
+                            <path d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.371 2.371 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976l2.61-3.045zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0zM1.5 8.5A.5.5 0 0 1 2 9v6h12V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5zm2 .5a.5.5 0 0 1 .5.5V13h8V9.5a.5.5 0 0 1 1 0V13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5a.5.5 0 0 1 .5-.5z" clip-rule="evenodd"></path>
+                          </svg>
+                          Cửa hàng
+                        </a>
+              {%endif%}
+                        <a class="dropdown-item d-flex align-items-center" href="/CustomerOrder">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shop-window" viewBox="0 0 16 16">
+                            <path d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.371 2.371 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976l2.61-3.045zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0zM1.5 8.5A.5.5 0 0 1 2 9v6h12V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5zm2 .5a.5.5 0 0 1 .5.5V13h8V9.5a.5.5 0 0 1 1 0V13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5a.5.5 0 0 1 .5-.5z" clip-rule="evenodd"></path>
+                          </svg>
+                          Đơn hàng của bạn
+                        </a>
+              {% if user_auth == 1 or user_auth == 2 or user_auth == 3 %} <!-- Admin and Boss-->
+                        <a class="dropdown-item d-flex align-items-center" href="/CustomerAllOrder">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shop-window" viewBox="0 0 16 16">
+                            <path d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.371 2.371 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976l2.61-3.045zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0zM1.5 8.5A.5.5 0 0 1 2 9v6h12V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5zm2 .5a.5.5 0 0 1 .5.5V13h8V9.5a.5.5 0 0 1 1 0V13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5a.5.5 0 0 1 .5-.5z" clip-rule="evenodd"></path>
+                          </svg>
+                          Quản lý đơn hàng
+                        </a>
+              {%endif%}
+              {% if user_auth == 1 or user_auth == 2 or user_auth == 3 or user_auth == 4 or user_auth == 5 %} <!-- Staff-->
+                        <a class="dropdown-item d-flex align-items-center" href="/calendar">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shop-window" viewBox="0 0 16 16">
+                            <path d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.371 2.371 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976l2.61-3.045zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0zM1.5 8.5A.5.5 0 0 1 2 9v6h12V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5zm2 .5a.5.5 0 0 1 .5.5V13h8V9.5a.5.5 0 0 1 1 0V13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5a.5.5 0 0 1 .5-.5z" clip-rule="evenodd"></path>
+                          </svg>
+                          Lịch làm việc
+                        </a>
+              {%endif%}
+                       <a class="dropdown-item d-flex align-items-center" href="/changepass">
+                          <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path></svg>
+                          Đổi mật khẩu
+                        </a>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                          <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-2 0c0 .993-.241 1.929-.668 2.754l-1.524-1.525a3.997 3.997 0 00.078-2.183l1.562-1.562C15.802 8.249 16 9.1 16 10zm-5.165 3.913l1.58 1.58A5.98 5.98 0 0110 16a5.976 5.976 0 01-2.516-.552l1.562-1.562a4.006 4.006 0 001.789.027zm-4.677-2.796a4.002 4.002 0 01-.041-2.08l-.08.08-1.53-1.533A5.98 5.98 0 004 10c0 .954.223 1.856.619 2.657l1.54-1.54zm1.088-6.45A5.974 5.974 0 0110 4c.954 0 1.856.223 2.657.619l-1.54 1.54a4.002 4.002 0 00-2.346.033L7.246 4.668zM12 10a2 2 0 11-4 0 2 2 0 014 0z" clip-rule="evenodd"></path></svg>
+                          Trợ giúp
+                        </a>
+                        <div role="separator" class="dropdown-divider my-1"></div>
+                        <a class="dropdown-item d-flex align-items-center" href="{{ url_for('customer_logout') }}">
+                          <svg class="dropdown-icon text-danger me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                          </svg>                
+                          Đăng xuất
+                        </a>
+                      </div>
+                    </li>
+                    {% else %}
+                    <div class="py-4">
+                      <a href="{{url_for('customerLogin')}}" >
+                      <button class="btn btn-gray-800" >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                        </svg>
+                          Đăng nhập
+                      </button>
+                    </a>
+                    </div>
+                    {% endif %}
+
+                  </ul>
+                </div>
+              </div>
+            </nav>

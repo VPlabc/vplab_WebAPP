@@ -1,0 +1,302 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+
+
+<div class="container">
+    {% include '_messages.html' %}
+
+    <div class="py-4">
+        {% if (user_auth == 1 or user_auth == 2 or user_auth == 3) and host == True%} <!-- Admin and Boss-->
+        <div class="text-center  p-2 h3 mb-3">Các Đơn Hàng</div>
+        {%endif%}
+        {% if host == False %}
+        <div class="text-center  p-2 h3 mb-3">Đơn Hàng Của Bạn</div>
+        <a href="{{url_for('shop')}}" class="btn btn-gray-800 d-inline-flex align-items-center me-2" >
+            <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+            Mua thêm hàng
+        </a>
+        {%endif%}
+
+    </div>
+    <div class="row">
+        <div class="col-24 col-xl-6 mb-4">
+            <div class="card border-0 shadow">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h2 class="fs-5 fw-bold mb-0">Đơn Hàng Chưa Xử Lý</h2>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <thead>
+                            <th>Hoá đơn</th>
+                            <th>Trạng thái</th>
+                        </thead>
+                        <tbody>
+                        {% for product in customerorder %}
+                            {% if host == True %}
+                                {% if product.status != "Chưa Thanh Toán" 
+                                and product.status != "Đã Thanh Toán | chờ lấy hàng" 
+                                and product.status != "Đã Thanh Toán | chờ shiper" 
+                                and product.status != "Đã Thanh Toán | đã lấy hàng" 
+                                and product.status != "Giao hàng thanh toán | đã bàn giao cho shiper" 
+                                and product.status != "Đã Thanh Toán | Đang ship"
+                                and product.status != "Đã huỷ đơn hàng"
+                                and product.status != "Đã huỷ và chờ giải quyết tài chính"
+                                %}
+                                <tr>
+                                    <td class="fw-bolder text-gray-900">
+                                        <span><!-- Button Modal -->
+                                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modal-{{product.id}}">Huỷ</button>
+                                        </span>
+                                        <a href="{{url_for('Vieworders', invoice=product.invoice , id=product.customer_id)}}" >{{ product.invoice }}</a>
+                                    </td>
+                                    <td class="fw-bolder text-gray-900">
+                                        {{ product.status }}
+                                    </td>
+                                </tr>
+                                {%endif%}
+                            {% else %}
+                                {% if product.status == "Chưa Thanh Toán" 
+                                or product.status == "Chuyển khoản | Đến cửa hàng lấy hàng" 
+                                or product.status == "Chuyển khoản | Ship tận nơi"
+                                or product.status == "Thanh Toán nhận hàng | Đến cửa hàng lấy hàng"
+                                or product.status == "Thanh Toán nhận hàng | Ship tận nơi"
+                                %}
+                                <tr>
+                                    <td class="fw-bolder text-gray-900">
+                                        <span>
+                                            <!-- Button Modal -->
+                                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modal-{{product.id}}">Huỷ</button>
+                                        </span>
+                                        <a href="{{url_for('Vieworders', invoice=product.invoice , id=product.customer_id)}}">  {{ product.invoice }}</a></td>
+                                    {% if product.status == "Chuyển khoản | Đến cửa hàng lấy hàng" or product.status == "Chuyển khoản | Ship tận nơi"%}
+                                    <td class="fw-bolder text-gray-900">Chưa chuyển khoản hoặc chưa xác nhận chuyển khoản</td>
+                                    {% else %}
+                                    <td class="fw-bolder text-gray-900">{{ product.status }}</td>
+                                    {% endif %}
+                                </tr>
+                                {%endif%}
+                            {%endif%}
+                            <!--============= MODEL ===================-->
+                                <!-- Modal Content -->
+                                    <div class="modal fade" id="modal-{{product.id}}" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
+                                        <div class="modal-dialog modal-info modal-dialog-centered" role="document">
+                                            <div class="modal-content bg-gradient-secondary">
+                                                <button type="button" class="btn-close theme-settings-close fs-6 ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <div class="modal-header">
+                                                    <p class="modal-title text-gray-200" id="modal-title-notification">Huỷ Đơn Hàng {{product.invoice }}</p>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                <p class="text-gray-200">Bạn có chắc muốn huỷ đơn hàng {{ product.invoice }}</p>
+                                                <p class="text-gray-200">
+                                                    {% for customer in customer %}
+                                                        {% if product.customer_id == customer.id %}
+                                                            Tên: {{customer.name}}
+                                                            <br>
+                                                            email: {{customer.email}}
+                                                            <br>
+                                                            Số điện thoại: {{customer.contact}}
+                                                            <br>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                <form action="{{url_for('deleteorder',id=product.id)}}" method="post">
+                                                    <button type="submit" class="btn btn-danger">Huỷ Đơn</button>
+                                                </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            <!--==============MODEL ===================-->
+                      {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-24 col-xl-6 mb-4">
+            <div class="card border-0 shadow">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h2 class="fs-5 fw-bold mb-0">Đơn Hàng Đã Thanh Toán</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <thead>
+                            <th>Hoá đơn</th>
+                            <th>Trạng thái</th>
+                        </thead>
+                        <tbody>
+                        {% for product in customerorder %}
+                            {% if product.status != "Chưa Thanh Toán" 
+                                and product.status != "Thanh Toán nhận hàng | Ship tận nơi" 
+                                and product.status != "Thanh Toán nhận hàng | Đến cửa hàng lấy hàng" 
+                                and product.status != "Chuyển khoản | Ship tận nơi" 
+                                and product.status != "Chuyển khoản | Đến cửa hàng lấy hàng" 
+                                and product.status != "Đã Thanh Toán | đã lấy hàng" 
+                                and product.status != "Giao hàng thanh toán | đã bàn giao cho shiper" 
+                                and product.status != "Đã Thanh Toán | Đang ship"
+                                and product.status != "Đã huỷ đơn hàng"
+                                and product.status != "Đã huỷ và chờ giải quyết tài chính"
+                                %}
+                        <tr>
+                            <td class="fw-bolder text-gray-900">
+                                <span>
+                                <!-- Button Modal -->
+                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modal-{{product.id}}">Huỷ</button>
+                                </span>
+                                <a href="{{url_for('Vieworders', invoice=product.invoice , id=product.customer_id)}}">
+                                    {{ product.invoice }}
+                                </a>
+                            </td>
+                            <td class="fw-bolder text-gray-900">{{ product.status }}</td>
+                        </tr>  
+                            {%endif%}
+                            <!--============= MODEL ===================-->
+                                <!-- Modal Content -->
+                                    <div class="modal fade" id="modal-{{product.id}}" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
+                                        <div class="modal-dialog modal-info modal-dialog-centered" role="document">
+                                            <div class="modal-content bg-gradient-secondary">
+                                                <button type="button" class="btn-close theme-settings-close fs-6 ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <div class="modal-header">
+                                                    <p class="modal-title text-gray-200" id="modal-title-notification">Huỷ Đơn Hàng {{product.invoice }}</p>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                <p class="text-gray-200">Bạn có chắc muốn huỷ đơn hàng {{ product.invoice }}</p>
+                                                <p class="text-gray-200">
+                                                    {% for customer in customer %}
+                                                        {% if product.customer_id == customer.id %}
+                                                            Tên: {{customer.name}}
+                                                            <br>
+                                                            email: {{customer.email}}
+                                                            <br>
+                                                            Số điện thoại: {{customer.contact}}
+                                                            <br>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                <form action="{{url_for('deleteorder',id=product.id)}}" method="post">
+                                                    <button type="submit" class="btn btn-danger">Huỷ Đơn</button>
+                                                </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            <!--============== MODEL ===================-->
+                      {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    </div>
+        
+        
+    <div class="row">
+        <div class="col-24 col-xl-6 mb-4">
+            <div class="card border-0 shadow">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h2 class="fs-5 fw-bold mb-0">Đơn Hàng Đã Giao</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <thead>
+                            <th>Hoá đơn</th>
+                            <th>Trạng thái</th>
+                        </thead>
+                        <tbody>
+                        {% for product in customerorder %}
+                            <tr>
+                                {% if product.status != "Chưa Thanh Toán" 
+                                and product.status != "Thanh Toán nhận hàng | Ship tận nơi" 
+                                and product.status != "Thanh Toán nhận hàng | Đến cửa hàng lấy hàng" 
+                                and product.status != "Chuyển khoản | Ship tận nơi" 
+                                and product.status != "Chuyển khoản | Đến cửa hàng lấy hàng" 
+                                and product.status != "Đã Thanh Toán | chờ lấy hàng" 
+                                and product.status != "Đã Thanh Toán | chờ shiper" 
+                                and product.status != "Đã huỷ đơn hàng"
+                                and product.status != "Đã huỷ và chờ giải quyết tài chính"
+                                %}
+                                <td class="fw-bolder text-gray-900">
+                                    <a href="{{url_for('Vieworders', invoice=product.invoice , id=product.customer_id)}}">
+                                        {{ product.invoice }}
+                                    </a>
+                                </td>
+                                <td class="fw-bolder text-gray-900">{{ product.status }}</td>
+                                </td>
+                            {%endif%}
+                            </tr>     
+                
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-24 col-xl-6 mb-4">
+            <div class="card border-0 shadow">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h2 class="fs-5 fw-bold mb-0">Đơn Hàng Đã Huỷ</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <thead>
+                            <th>Hoá đơn</th>
+                            <th>Trạng thái</th>
+                        </thead>
+                        <tbody>
+                        {% for product in customerorder %}
+                            <tr>
+                            {% if product.status == "Đã huỷ đơn hàng"
+                            or   product.status == "Đã huỷ và chờ giải quyết tài chính"
+                            %}
+                                <td class="fw-bolder text-gray-900">
+                                    <a href="{{url_for('Vieworders', invoice=product.invoice , id=product.customer_id)}}">
+                                        {{ product.invoice }}
+                                    </a>
+                                </td>
+                                <td class="fw-bolder text-gray-900">{{ product.status }}</td>
+                                </td>
+                            {%endif%}
+                            </tr>
+                
+                        {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+<!-- ================================================================================================================== -->
+ 
+
+    {% if host == False %}
+  
+    {%endif%}
+</div>
+{% endblock content %}

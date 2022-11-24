@@ -1,0 +1,73 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    {% include '_messages.html' %}
+    
+    <a href="{{url_for('shop')}}" class="btn btn-gray-800 d-inline-flex align-items-center me-2" >
+        <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+        Mua thêm hàng
+    </a>
+    <div class="row">
+        <div class="col-md-12">
+        <table class="table table-sm">
+            <thead>
+                <th>STT</th>
+                <th>Hình ảnh</th>
+                <th>Tên sản phẩm</th>
+                <th>Màu sắc</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Giảm giá</th>
+                <th>Thành tiền</th>
+                <th>Cập nhật</th>
+                <th>Xoá</th>
+            </thead>
+            <tbody>      
+                {% for key, product in session['Shoppingcart'].items() %}
+                {% set discount =(product.discount/100) * product.price|float %}
+                <tr>
+                    <td>{{loop.index}}</td>
+                    <td><img src="{{url_for('static',filename='images/'+ product.image)}}" alt="{{product.name}}" width="50" height="45"></td>
+                    <td>{{product.name}}</td>
+                    <form action="{{url_for('updatecart', code=key)}}" method="post">
+                    <td>
+                        {% set colors = product.colors.split(',') %}
+                        <label for="colors">Colors: </label>
+                        <select name="color" id="color">
+                            <option value="{{product.color}}" style="display: none;">{{product.color|capitalize}}</option>
+                            {% for color in colors %}
+                            {% set col = color.split(':') %}
+                            <option value="{{col[0]}}">{{col[0] | capitalize }}</option>
+                            {% endfor %}
+                        </select>
+                    
+                    </td>
+                    <td>{{"%.0f"|format(product.price)}}</td>
+                    <td> <input type="number" name="quantity" min="1" max="10" value="{{product.quantity}}"> </td>
+                    {% if product.discount  %}
+                    <td>{{product.discount}} % &nbsp; &nbsp; is {{"%.0f"|format(discount)}}</td>
+                    {% else %}
+                    <td></td>
+                    {% endif %}
+                    {% set subtotal = product.quantity|int * product.price|float  %}
+                    <td>{{"%.0f"|format(subtotal - discount|round(1,'floor')) }}</td>
+                    <td><button type="submit" class="btn btn-sm btn-info">Cập nhật</button> </td>
+                </form>
+                    <td> <a href="{{url_for('deleteitem', id=key)}}" class="btn btn-sm btn-danger">Xoá</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <table class="table table-sm">
+           <tr>
+               <td> <a href="{{url_for('get_order')}}" class="btn btn-success"> Đặt hàng ngay</a> </td>
+               <td width="35%"></td>
+               <td> <h5>vận chuyển: {{tax}}</h5></td>
+               <td> <h5>Tổng thành tiền: {{grandtotal}}</h3> </td>
+                <td> <a href="{{url_for('clearcart')}}" class="btn btn-danger btn-sm float-right mr-4"> Xoá giỏ hàng</a> </td>
+           </tr>
+        </table>
+    </div>
+  </div>
+</div>
+{% endblock content %}

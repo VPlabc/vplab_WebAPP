@@ -1,0 +1,73 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+
+
+<div class="container">
+    {% include '_messages.html' %}
+
+    <div class="py-4">
+        <div class="text-center  p-2 h3 mb-3">Các Thành Viên</div>
+        <a href="{{url_for('addproduct')}}" class="btn btn-gray-800 d-inline-flex align-items-center me-2" >
+            <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+            Thêm
+        </a>
+    </div>
+    <table class="table tbale-sm">
+        <thead>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Invoice</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>View</th>
+            <th>Delete</th>
+        </thead>
+        <tbody>
+          {% for product in customerorder %}
+          <tr>
+          <td>{{loop.index}}</td>
+          {% for customer in customer %}
+            {% if product.customer_id == customer.id %}
+            <td>{{ customer.name }}</td>
+            {% endif %}
+          {% endfor %}
+          
+            <td>{{ product.invoice }}</td>
+            <td>{{ product.status }}</td>
+            <td>{{ product.date_created}}</td>
+            <td> <a href="{{url_for('updateproduct', id=product.id)}}" class="btn btn-sm btn-info">View </a> </td>
+            <td><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="xacnhan{{product.id}}">
+              Delete
+            </button></td>
+          </tr>
+
+ <!--============= MODEL ===================-->
+        <div class="modal fade" id="xacnhan{{product.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{product.name }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p class="text-danger">Are you Sure that you want to delete this Category ({{ product.name }})</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <form action="{{url_for('deletecat',id=product.id)}}" method="post">
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+<!--==============MODEL ===================-->
+
+          {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}
